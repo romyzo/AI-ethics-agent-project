@@ -1,0 +1,183 @@
+# -------------------------------------------------------------
+# 🤖 AI Ethics Agent .gitignore
+# Purpose: Ignore sensitive / auto-generated files for AI Ethics Agent project
+# -------------------------------------------------------------
+
+# --- 1️⃣ Python 캐시 및 환경 ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.tmp
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# --- 2️⃣ 가상환경 폴더 ---
+venv/
+.venv/
+env/
+.env/
+ENV/
+env.bak/
+venv.bak/
+.conda/
+conda-meta/
+
+# --- 3️⃣ 환경 변수 파일 ---
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+*.env
+config.ini
+secrets.json
+api_keys.json
+
+# --- 4️⃣ 데이터 / 결과물 / 모델 파일 ---
+outputs/
+results/
+data/
+datasets/
+models/
+checkpoints/
+*.json
+*.csv
+*.xlsx
+*.db
+*.sqlite3
+*.sqlite
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+*.model
+*.weights
+*.bin
+*.safetensors
+
+# --- 5️⃣ Vector Database ---
+chroma_db/
+chroma_db_*/
+*.chroma
+*.faiss
+*.index
+vectorstore/
+embeddings/
+
+# --- 6️⃣ PDF, 문서, 보고서 파일 ---
+*.pdf
+*.docx
+*.doc
+*.txt
+reports/
+documents/
+pdfs/
+
+# --- 7️⃣ IDE 설정 파일 ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# --- 8️⃣ Jupyter 자동 생성 파일 ---
+.ipynb_checkpoints/
+*.ipynb_checkpoints/
+
+# --- 9️⃣ 로그 및 임시 파일 ---
+logs/
+*.log
+*.out
+*.err
+temp/
+tmp/
+.tmp/
+*.tmp
+*.temp
+
+# --- 🔟 AI/ML 특화 파일 ---
+wandb/
+mlruns/
+.neptune/
+tensorboard_logs/
+lightning_logs/
+*.onnx
+*.tflite
+*.pb
+*.pth
+*.pt
+*.ckpt
+
+# --- 1️⃣1️⃣ API 키 및 인증 파일 ---
+credentials.json
+service_account.json
+*.pem
+*.key
+*.crt
+*.p12
+
+# --- 1️⃣2️⃣ 캐시 파일 ---
+.cache/
+cache/
+*.cache
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# --- 1️⃣3️⃣ 운영체제별 파일 ---
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# --- 1️⃣4️⃣ 프로젝트 특화 ---
+# AI Ethics Agent 특화 파일들
+ethics_reports/
+bias_analysis/
+fairness_metrics/
+model_explanations/
+audit_logs/
+compliance_reports/
