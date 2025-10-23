@@ -97,8 +97,7 @@ EU AI Act(법적 관점) + OECD(투명성·책임성) + UNESCO(포용성·인간
 ---
 
 ## 🧱 Architecture
-
-<img width="312" height="750" alt="image" src="https://github.com/user-attachments/assets/6b277ad8-4c65-4596-9edd-35184251f575" />
+<img width="339" height="921" alt="image" src="https://github.com/user-attachments/assets/dec7c88d-c2fa-4a01-91e9-d58b14156256" />
 
 
 ## 📁 Directory Structure
