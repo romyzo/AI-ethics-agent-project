@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Mitigation Recommender Agent - Python Version
+Mitigation Recommender Agent
 리스크별 개선 권고안 생성
 """
 
@@ -13,8 +13,8 @@ from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 from dotenv import load_dotenv
 
-# 환경 변수 로드
 load_dotenv()
+
 
 def mitigation_recommender_execute():
     """Mitigation Recommender 실행 함수"""
@@ -22,20 +22,27 @@ def mitigation_recommender_execute():
     print("💡 Mitigation Recommender 시작...")
     print("="*60)
     
-    # State 로드
     sys.path.append('..')
     from state_manager import load_state, save_state, update_status
     
     state = load_state()
     
-    # Risk Assessor 결과 확인
+    # ✅ Risk Assessor 완료 여부 확인
     if state.get("status", {}).get("risk_assessor") != "completed":
         print("❌ Risk Assessor가 완료되지 않았습니다.")
+        print("💡 해결 방법: Risk Assessor를 먼저 실행하세요.")
+        update_status(state, "mitigation_recommender", "skipped")
+        save_state(state)
         return state
     
+    # ✅ Assessment Result 검증
     assessment_result = state.get("assessment_result", {})
-    if not assessment_result:
-        print("❌ Assessment Result가 없습니다.")
+    if not assessment_result or not assessment_result.get("assessed_risks"):
+        print("❌ Assessment Result가 비어있습니다.")
+        print("💡 해결 방법: Risk Assessor를 다시 실행하세요.")
+        state["recommendation_status"] = "Error: Missing assessment_result"
+        update_status(state, "mitigation_recommender", "failed")
+        save_state(state)
         return state
     
     # 권고안 생성 실행
@@ -45,9 +52,11 @@ def mitigation_recommender_execute():
     save_state(updated_state)
     update_status(updated_state, "mitigation_recommender", "completed")
     
-    print(f"✅ 권고안 생성 완료 - {len(updated_state.get('recommendation_result', []))}개 권고안")
+    recommendation_count = len(updated_state.get('recommendation_result', []))
+    print(f"✅ 권고안 생성 완료 - {recommendation_count}개 권고안")
     
     return updated_state
+
 
 def generate_recommendations_and_update_state(state: Dict[str, Any]) -> Dict[str, Any]:
     """State에서 평가 결과를 읽고, 개선 권고안을 생성한 후, State에 결과를 저장합니다."""
@@ -56,20 +65,22 @@ def generate_recommendations_and_update_state(state: Dict[str, Any]) -> Dict[str
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
     
     assessment_data = state.get('assessment_result', {})
-    if not assessment_data or not assessment_data.get('assessed_risks'):
-        state['recommendation_status'] = "Error: Missing assessment_result in state."
-        return state
-    
     service_name = assessment_data.get('service_name', 'AI 서비스')
+    
+    # ✅ High와 Limited 리스크만 권고안 생성
     risks_to_mitigate = [
-        r for r in assessment_data['assessed_risks'] 
-        if r['risk_level'] in ['High', 'Limited'] # High와 Limited 리스크만 권고안 생성
+        r for r in assessment_data.get('assessed_risks', [])
+        if r.get('risk_level') in ['High', 'Limited']
     ]
+    
+    if not risks_to_mitigate:
+        print("⚠️ High/Limited 리스크가 없습니다. Minimal 리스크도 포함하여 권고안을 생성합니다.")
+        risks_to_mitigate = assessment_data.get('assessed_risks', [])
     
     all_recommendations = []
     parser = JsonOutputParser(pydantic_object=None)
     
-    print(f"\n💡 Mitigation Recommender 시작: {service_name}의 개선 권고안 생성")
+    print(f"\n💡 Mitigation Recommender: {service_name}의 개선 권고안 생성")
     
     # JSON 출력 구조 정의
     RECOMMENDATION_OUTPUT_SCHEMA = {
@@ -103,8 +114,10 @@ def generate_recommendations_and_update_state(state: Dict[str, Any]) -> Dict[str
         )
     ])
     
+    recommendation_id = 1
+    
     for risk in risks_to_mitigate:
-        category = risk['category']
+        category = risk.get('category', 'unknown')
         print(f"\n   ⚙️ {category.upper()} 리스크 개선 권고안 생성 중...")
         
         chain = RECOMMENDATION_PROMPT | llm | parser
@@ -114,28 +127,32 @@ def generate_recommendations_and_update_state(state: Dict[str, Any]) -> Dict[str
                 "schema": json.dumps(RECOMMENDATION_OUTPUT_SCHEMA, indent=2, ensure_ascii=False),
                 "service_name": service_name,
                 "category": category,
-                "risk_level": risk['risk_level'],
-                "assessment_summary": risk['assessment_summary'],
-                "recommendation_focus": risk['recommendation_focus']
+                "risk_level": risk.get('risk_level', 'Unknown'),
+                "assessment_summary": risk.get('assessment_summary', ''),
+                "recommendation_focus": risk.get('recommendation_focus', '')
             })
             
-            # 카테고리 정보와 함께 리스트에 추가
+            # 카테고리 정보와 ID 추가
             for rec in recommendation_list:
                 rec['risk_category'] = category
+                rec['recommendation_id'] = recommendation_id
+                recommendation_id += 1
             
             all_recommendations.extend(recommendation_list)
             print(f"     ✅ 권고안 {len(recommendation_list)}개 생성 완료: {category.upper()}")
             
         except Exception as e:
             print(f"     ❌ 권고안 생성 실패 ({category}): {e}")
-            
-    # State에 권고안 결과 저장
+            # 실패해도 다음 카테고리 계속 진행
+            continue
+    
+    # ✅ State에 권고안 결과 저장
     state['recommendation_result'] = all_recommendations
     state['recommendation_status'] = "Success"
     
     print("\n✅ Mitigation Recommender 완료 및 State 업데이트 완료!")
     return state
 
+
 if __name__ == "__main__":
-    # 테스트 실행
     mitigation_recommender_execute()

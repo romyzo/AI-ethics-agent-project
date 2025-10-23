@@ -8,11 +8,15 @@ from dotenv import load_dotenv
 # 환경 변수 로드
 load_dotenv()
 
-# 에이전트 디렉토리 추가
-sys.path.append(os.path.join(os.path.dirname('.'), 'agents'))
+# ✅ agents 폴더를 sys.path에 추가 (절대 경로 사용)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+agents_dir = os.path.join(current_dir, 'agents')
+sys.path.insert(0, agents_dir)
 
 print("✅ 라이브러리 불러오기 완료!")
+print(f"✅ Agents 폴더 경로: {agents_dir}")
 print(f"✅ OpenAI API 키 설정 확인: {'설정됨' if os.getenv('OPENAI_API_KEY') else '설정 안됨'}")
+
 # step2. PDF 파일 업로드 및 서비스 정보 추출
 from langchain_community.document_loaders import PyMuPDFLoader
 from langchain_openai import ChatOpenAI
@@ -63,6 +67,7 @@ JSON 형식으로만 답변하세요."""
         return None
 
 print("✅ PDF 처리 함수 정의 완료!")
+
 # step3. PDF 파일 경로 설정 및 서비스 정보 추출
 print("="*80)
 print("🛡️ AI 윤리 리스크 진단 에이전트 시작")
@@ -98,6 +103,7 @@ else:
         print("\n🚀 파이프라인 실행을 시작합니다!")
     else:
         print("❌ 서비스 정보 추출에 실패했습니다.")
+
 # step4. Service Profiler 실행 (PDF에서 추출한 정보 사용)
 print("\n" + "="*60)
 print("1️⃣ Service Profiler 실행 중...")
@@ -120,13 +126,14 @@ except Exception as e:
     print(f"❌ Service Profiler 실행 실패: {e}")
     import traceback
     traceback.print_exc()
+
 # step5. Evidence Collector 실행
 print("\n" + "="*60)
 print("2️⃣ Evidence Collector 실행 중...")
 print("="*60)
 
 try:
-    from agents.evidence_collector import evidence_collector_execute
+    from evidence_collector import evidence_collector_execute
     
     evidence_collector_execute()
     print("✅ Evidence Collector 완료!")
@@ -135,13 +142,14 @@ except Exception as e:
     print(f"❌ Evidence Collector 실행 실패: {e}")
     import traceback
     traceback.print_exc()
+
 # step6. Risk Assessor 실행
 print("\n" + "="*60)
 print("3️⃣ Risk Assessor 실행 중...")
 print("="*60)
 
 try:
-    from agents.risk_assessor import risk_assessor_execute
+    from risk_assessor import risk_assessor_execute
     
     risk_assessor_execute()
     print("✅ Risk Assessor 완료!")
@@ -150,13 +158,14 @@ except Exception as e:
     print(f"❌ Risk Assessor 실행 실패: {e}")
     import traceback
     traceback.print_exc()
+
 # step7. Mitigation Recommender 실행
 print("\n" + "="*60)
 print("4️⃣ Mitigation Recommender 실행 중...")
 print("="*60)
 
 try:
-    from agents.mitigation_recommender import mitigation_recommender_execute
+    from mitigation_recommender import mitigation_recommender_execute
     
     mitigation_recommender_execute()
     print("✅ Mitigation Recommender 완료!")
@@ -165,13 +174,14 @@ except Exception as e:
     print(f"❌ Mitigation Recommender 실행 실패: {e}")
     import traceback
     traceback.print_exc()
+
 # step8. Report Composer 실행
 print("\n" + "="*60)
 print("5️⃣ Report Composer 실행 중...")
 print("="*60)
 
 try:
-    from agents.report_composer import report_composer_execute
+    from report_composer import report_composer_execute
     
     final_state = report_composer_execute()
     print("✅ Report Composer 완료!")
@@ -181,6 +191,7 @@ except Exception as e:
     import traceback
     traceback.print_exc()
     final_state = {}
+
 # step9. 최종 결과 출력
 print("\n" + "="*80)
 print("🎉 AI 윤리 리스크 진단 완료!")
