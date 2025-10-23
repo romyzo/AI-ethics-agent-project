@@ -98,17 +98,8 @@ EU AI Act(법적 관점) + OECD(투명성·책임성) + UNESCO(포용성·인간
 
 ## 🧱 Architecture
 
-```mermaid
-graph TD
-    A[Supervisor Agent 🧭<br/>흐름 제어 및 상태 업데이트] --> B[Service Profiler 🧩<br/>서비스 분석]
-    B --> C[Evidence Collector 🔍<br/>RAG 기반 증거 수집]
-    C --> D[Risk Assessor ⚖️<br/>윤리 리스크 평가]
-    D --> E[Mitigation Recommender 💡<br/>개선 권고안 생성]
-    E --> F[Report Composer 📝<br/>Markdown → PDF 보고서 생성]
-    F --> G[📄 최종 보고서 출력]
-
-## Architecture
 <img width="312" height="750" alt="image" src="https://github.com/user-attachments/assets/6b277ad8-4c65-4596-9edd-35184251f575" />
+
 
 ## 📁 Directory Structure
 
@@ -133,6 +124,14 @@ ai_ethics_agent/
 ├── .env (API Key 환경 변수)
 └── README.md
 
+
+## 📚 Reference
+
+- EU AI Act (2024)
+- OECD AI Principles (2019)
+- UNESCO AI Ethics Recommendation (2021)
+
+- 
 ## 🧰 Troubleshooting & Update Log
 
 | 날짜 | 수정 항목 | 개선 내용 |
@@ -146,11 +145,30 @@ ai_ethics_agent/
 | 2025-10-23 | `diagnosed_risk_categories` 키 불일치 | Profiler ↔ Collector key 매핑 수정 |
 | 2025-10-23 | LangGraph 비주얼 누락 → Mermaid 추가 | Supervisor 전체 흐름 시각화 완료 |
 
-## 📚 Reference
 
-- EU AI Act (2024)
-- OECD AI Principles (2019)
-- UNESCO AI Ethics Recommendation (2021)
+## 🧩 기술 개념 정리 (학습 기록)
+
+| 개념 | 학습 내용 요약 |
+|:--|:--|
+| **Embedding** | 텍스트를 벡터화하여 문서 간 의미적 유사도 비교에 활용. RAG의 핵심. |
+| **Token 과금 구조** | OpenAI 모델은 입력/출력 모두 토큰 단위로 과금됨. Chunking할수록 비용 증가. |
+| **RAG (Retrieval-Augmented Generation)** | LLM이 외부 문서(DB)에서 근거를 검색해 답변 품질을 높이는 구조. |
+| **Chroma / FAISS** | 문서 벡터를 저장·검색하기 위한 Vector DB. Chroma는 persist(저장) 지원. |
+| **LangGraph** | LLM Agent들을 순차/조건적으로 연결하는 워크플로우 프레임워크. |
+| **pypandoc** | Markdown을 PDF로 변환하는 도구. 기업 보고서 수준의 서식 구현 가능. |
+
+## 🧰 Git 사용법 학습 내용
+
+| 기능 | 명령어 예시 | 이해 및 습득 내용 |
+|:--|:--|:--|
+| **저장소 복제** | `git clone <URL>` | GitHub 원격 저장소를 로컬 환경으로 복제 |
+| **작업 브랜치 생성** | `git checkout -b dev` | main과 분리된 개발용 브랜치 운영 |
+| **파일 추가 / 커밋** | `git add .` / `git commit -m "Add: new agent"` | 변경 내용을 단계별로 관리 |
+| **원격 반영** | `git push origin dev` | 수정된 코드 푸시 및 팀 공유 |
+| **상태 확인** | `git status` | 수정/추적 파일 상태를 실시간 확인 |
+| **커밋 되돌리기** | `git reset --soft HEAD~1` | 실수한 커밋 취소 및 수정 가능 |
+| **README 업데이트** | `git add README.md && git commit -m "Docs: Update README"` | 문서 변경도 버전별로 관리 |
+
 
 
 ## 👥 Contributors 
