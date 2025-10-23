@@ -101,34 +101,7 @@ EU AI Act(법적 관점) + OECD(투명성·책임성) + UNESCO(포용성·인간
 
 
 ## 📁 Directory Structure
-
-ai_ethics_agent/
-│
-├── agents/
-│   ├── service_profiler.ipynb / .py        # 서비스 분석 에이전트
-│   ├── evidence_collector.ipynb / .py      # RAG 기반 증거 수집 에이전트
-│   ├── risk_assessor.ipynb / .py           # 윤리 리스크 평가 에이전트
-│   ├── mitigation_recommender.ipynb        # 개선 권고안 생성 에이전트
-│   └── report_composer.ipynb / .py         # 최종 보고서 작성 에이전트
-│
-├── data/
-│   ├── reference/                          # 참고 문서 (EU_AI_Act.pdf, OECD_Privacy_2024.pdf, UNESCO_Ethics_2021.pdf)
-│   ├── crawled/                            # 웹 검색 데이터 저장
-│   └── embeddings/                         # Chroma 벡터 DB 저장소
-│
-├── output/
-│   └── reports/                            # 생성된 Markdown 및 PDF 보고서
-│
-├── utils/                                  # 공통 유틸 및 상태 관리 모듈
-│   ├── state_manager.py                    # State 초기화 및 공유 로직
-│   ├── agent_state.json                    # 각 에이전트 상태 저장 파일
-│   └── __init__.py
-│
-├── main.py                                 # Supervisor 파이프라인 실행 스크립트
-├── state.ipynb                             # LangGraph 상태 정의 노트북
-├── .env                                    # API Key 및 환경 변수 설정
-└── README.md
-
+<img width="810" height="537" alt="image" src="https://github.com/user-attachments/assets/0b016faf-35f0-4dbd-a319-63c4d81525e1" />
 
 
 
