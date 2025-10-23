@@ -149,6 +149,9 @@ EU AI Act(법적 관점) + OECD(투명성·책임성) + UNESCO(포용성·인간
 | **커밋 되돌리기** | `git reset --soft HEAD~1` | 실수한 커밋 취소 및 수정 가능 |
 | **README 업데이트** | `git add README.md && git commit -m "Docs: Update README"` | 문서 변경도 버전별로 관리 |
 
+## 👩🏻‍💻 최종 report 결과물
+
+[ai_mini_3반_조혜림.pdf](https://github.com/user-attachments/files/23092184/ai_mini_3._.pdf)
 
 
 ## 👥 Contributors 
